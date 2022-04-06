@@ -1,0 +1,12 @@
+{% extends "todo/base.html" %}
+
+{% block content %}
+<div class="container">
+	<h1>ログイン</h1>
+	<form method="post" action="{% url 'login' %}">
+		{% csrf_token %}
+		{{ form.as_p }}
+		<button type="submit" class="btn btn-primary">送信</button>
+	</form>
+</div>
+{% endblock %}
