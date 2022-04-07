@@ -1,56 +1,76 @@
+{% load static %} 
+
 <!doctype html>
 <html lang="ja">
-  <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <title>みんなのTODOリスト</title>
-  </head>
-  <body>
-    <header>
-      <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="{% url 'todo:index' %}">みんなのTODOリスト</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav mr-auto">
-          </ul>
-          <ul class="navbar-nav">
-            {% if request.user.is_authenticated %}
-            <li class="nav-item">
-			  <a class="nav-link" href="{% url 'todo:users_detail' request.user.pk %}">{{ request.user.username }}</a>
-			</li>
-			<li class="nav-item">
-				<a class="nav-link" href="{% url 'todo:lists_list' %}">リスト一覧</a>
-			</li>
-			<li class="nav-item">
-			  <a class="nav-link" href="{% url 'logout' %}">ログアウト</a>
-			</li>
-            {% else %}
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'login' %}">ログイン</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'todo:signup' %}">会員登録</a>
-            </li>
-            {% endif %}
-          </ul>
-        </div>
-      </nav>
-    </header>
-    <main>
-      {% block content %}
-      {% endblock %}
-    </main>
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-  </body>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="{% static 'todo/custom.css' %}">
+
+  <title>みんなのTODOリスト</title>
+</head>
+
+<body>
+  <header>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+      {% if request.user.is_authenticated %}
+      <a class="navbar-brand" href="{% url 'todo:home' %}">みんなのTODOリスト</a>
+      {% else %}
+      <a class="navbar-brand" href="{% url 'todo:index' %}">みんなのTODOリスト</a>
+      {% endif %}
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+        </ul>
+        <ul class="navbar-nav">
+          {% if request.user.is_authenticated %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'todo:users_detail' request.user.pk %}">{{ request.user.username }}</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'todo:lists_list' %}">リスト一覧</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'todo:cards_list' %}">カード一覧</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'logout' %}">ログアウト</a>
+          </li>
+          {% else %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'login' %}">ログイン</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'todo:signup' %}">会員登録</a>
+          </li>
+          {% endif %}
+        </ul>
+      </div>
+    </nav>
+  </header>
+  <main>
+    {% block content %}
+    {% endblock %}
+  </main>
+  <!-- Optional JavaScript -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+    integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+    crossorigin="anonymous"></script>
+</body>
 </html>

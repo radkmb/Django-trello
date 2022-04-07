@@ -1,8 +1,35 @@
 {% extends "todo/base.html" %}
 
 {% block content %}
-<div class="container">
-	<h1>会員登録完了</h1>
-	<p>会員登録が完了しました。</p>
+<div class="bg"></div>
+<div class="bg bg2"></div>
+<div class="bg bg3"></div>
+<div class="content">
+	<div class="container-fluid home">
+		<div class="row flex-nowrap">
+			{% for list in list_list %}
+			<div class="bg-light m-3 p-2 list">
+				<h4>{{ list.title }}
+					<a href="{% url 'todo:lists_update' list.pk %}" class="text-dark"><i class="far fa-edit fa-xs"></i></a>
+					<a href="{% url 'todo:lists_delete' list.pk %}" class="text-dark"><i class="far fa-trash-alt fa-xs"></i></a>
+				</h4>
+
+				{% for card in list.card_set.all %}
+				<a href="{% url 'todo:cards_detail' card.pk %}" class="card m-3">
+					<div class="card-body">
+						<h5 class="card-title">{{ card.title }}</h5>
+						<footer>
+							<small class="text-muted">作成者: {{ card.user.username }}</small>
+						</footer>
+					</div>
+				</a>
+				{% endfor %}
+				<a href="{% url 'todo:cards_create_from_home' list.pk %}" class="text-dark"><i
+						class="far fa-plus-square"></i> さらにカードを追加</a>
+			</div>
+			{% endfor %}
+		</div>
+	</div>
 </div>
+
 {% endblock %}
