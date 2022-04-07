@@ -1,0 +1,22 @@
+{% extends "todo/base.html" %}
+
+{% block content %}
+<div class="container">
+  <h1>ユーザー詳細</h1>
+    <dl class="row">
+    <dt class="col-sm-3">ユーザー名</dt>
+    <dd class="col-sm-9">{{ user.username }}</dd>
+    <dt class="col-sm-3">姓</dt>
+    <dd class="col-sm-9">{{ user.last_name }}</dd>
+    <dt class="col-sm-3">名</dt>
+    <dd class="col-sm-9">{{ user.first_name }}</dd>
+    <dt class="col-sm-3">メールアドレス</dt>
+    <dd class="col-sm-9">{{ user.email }}</dd>
+  </dl>
+  {% if user.pk == request.user.pk %}
+  <a class="btn btn-primary" href="{% url 'todo:users_update' user.pk  %}" role="button">編集</a>
+  {% else %}
+  <a class="btn btn-primary disabled" href="#" role="button">編集</a>
+  {% endif %}
+</div>
+{% endblock %}

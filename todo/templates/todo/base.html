@@ -22,9 +22,9 @@
           </ul>
           <ul class="navbar-nav">
             {% if request.user.is_authenticated %}
-            <span class="navbar-text">
-              {{ request.user.username }}
-            </span>
+            <li class="nav-item">
+			  <a class="nav-link" href="{% url 'todo:users_detail' request.user.pk %}">{{ request.user.username }}</a>
+			</li>
 			<li class="nav-item">
 			  <a class="nav-link" href="{% url 'logout' %}">ログアウト</a>
 			</li>
