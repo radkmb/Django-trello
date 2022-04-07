@@ -72,7 +72,6 @@ class ListUpdateView(LoginRequiredMixin, UpdateView):
 class ListDeleteView(LoginRequiredMixin, DeleteView):
     model = List
     template_name = "todo/lists/delete.html"
-    form_class = ListForm
     success_url = reverse_lazy("todo:home")
 
 class CardCreateView(LoginRequiredMixin, CreateView):
@@ -102,7 +101,6 @@ class CardUpdateView(LoginRequiredMixin, UpdateView):
 class CardDeleteView(LoginRequiredMixin, DeleteView):
     model = Card
     template_name = "todo/cards/delete.html"
-    form_class = CardForm
     success_url = reverse_lazy("todo:home")
 
 class HomeView(LoginRequiredMixin, ListView):
