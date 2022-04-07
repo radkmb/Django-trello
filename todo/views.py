@@ -7,8 +7,8 @@ from django.shortcuts import render, redirect, resolve_url
 from django.urls import reverse_lazy
 from django.views.generic import DetailView, UpdateView, CreateView, ListView, DeleteView
 
-from .forms import UserForm, ListForm
-from . models import List
+from .forms import UserForm, ListForm, CardForm
+from . models import List, Card
 from .mixins import OnlyYouMixin
 
 def index(request):
@@ -75,3 +75,34 @@ class ListDeleteView(LoginRequiredMixin, DeleteView):
     model = List
     template_name = "todo/lists/delete.html"
     success_url = reverse_lazy("todo:lists_list")
+
+class CardCreateView(LoginRequiredMixin, CreateView):
+    model = Card
+    template_name = "todo/cards/create.html"
+    form_class = CardForm
+    success_url = reverse_lazy("todo:cards_list")
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
+
+class CardListView(LoginRequiredMixin, ListView):
+    model = Card
+    template_name = "todo/cards/list.html"
+
+class CardDetailView(LoginRequiredMixin, DetailView):
+    model = Card
+    template_name = "todo/cards/detail.html"
+
+class CardUpdateView(LoginRequiredMixin, UpdateView):
+    model = Card
+    template_name = "todo/cards/update.html"
+    form_class = CardForm
+
+    def get_success_url(self):
+        return resolve_url('todo:cards_detail', pk=self.kwargs['pk'])
+
+class CardDeleteView(LoginRequiredMixin, DeleteView):
+    model = Card
+    template_name = "todo/cards/delete.html"
+    success_url = reverse_lazy("todo:cards_list")

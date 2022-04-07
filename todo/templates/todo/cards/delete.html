@@ -1,0 +1,12 @@
+{% extends "todo/base.html" %}
+
+{% block content %}
+<div class="container">
+  <h1>カード削除</h1>
+  <form method="post">
+    {% csrf_token %}
+    <p>カード "{{ card.title }}" を本当に削除してもよろしいですか？</p>
+    <button type="submit" class="btn btn-danger">確認</button>
+  </form>
+</div>
+{% endblock %}

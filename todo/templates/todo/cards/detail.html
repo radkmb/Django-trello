@@ -1,0 +1,19 @@
+{% extends "todo/base.html" %}
+
+{% block content %}
+<div class="container">
+	<h1>カード詳細</h1>
+	<dl class="row">
+		<dt class="col-sm-3">タイトル</dt>
+		<dd class="col-sm-9">{{ card.title }}</dd>
+		<dt class="col-sm-3">詳細</dt>
+		<dd class="col-sm-9">{{ card.description }}</dd>
+		<dt class="col-sm-3">リスト名</dt>
+		<dd class="col-sm-9">{{ card.list.title }}</dd>
+		<dt class="col-sm-3">ユーザー名</dt>
+		<dd class="col-sm-9">{{ card.user.username }}</dd>
+	</dl>
+	<a class="btn btn-primary" href="{% url 'todo:cards_update' card.pk  %}" role="button">編集</a>
+	<a class="btn btn-danger" href="{% url 'todo:cards_delete' card.pk  %}" role="button">削除</a>
+</div>
+{% endblock %}
