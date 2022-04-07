@@ -1,0 +1,15 @@
+{% extends "todo/base.html" %}
+
+{% block content %}
+<div class="container">
+  <h1>リスト詳細</h1>
+  <dl class="row">
+    <dt class="col-sm-3">タイトル</dt>
+    <dd class="col-sm-9">{{ list.title }}</dd>
+    <dt class="col-sm-3">ユーザー名</dt>
+    <dd class="col-sm-9">{{ list.user.username }}</dd>
+  </dl>
+  <a class="btn btn-primary" href="{% url 'todo:lists_update' list.pk  %}" role="button">編集</a>
+  <a class="btn btn-danger" href="{% url 'todo:lists_delete' list.pk  %}" role="button">削除</a>
+</div>
+{% endblock %}
