@@ -1,9 +1,12 @@
 {% extends "todo/base.html" %}
+{% load static %}
 
 {% block content %}
 <div class="container" style="text-align: center; margin-top: 30px;">
 	<h1 class="display-4">みんなのTODOリスト</h1>
 	<hr class="my-4">
+	<h2>みんなのTODOリストを見てやる気を出そう！！</h2>
+	<img src="{% static 'images/undraw_Collaboration_re_vyau.png' %}"><br>
 	<a class="btn btn-primary btn-lg" href="{% url 'login' %}" role="button">ログイン</a>
   	<a class="btn btn-primary btn-lg" href="{% url 'todo:signup' %}" role="button">会員登録</a>
 </div>

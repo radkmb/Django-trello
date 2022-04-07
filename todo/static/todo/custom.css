@@ -6,6 +6,11 @@ body {
 	padding-top: 70px;
 	margin:0;
 }
+
+img {
+	height: 400px;
+	width: 400px;
+}
   
 .bg {
 	animation:slide 3s ease-in-out infinite alternate;

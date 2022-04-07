@@ -6,6 +6,7 @@
 <div class="bg bg3"></div>
 <div class="content">
 	<div class="container-fluid home">
+		<a class="btn btn-success my-3" href="{% url 'todo:lists_create' %}" role="button"><i class="fas fa-pen"></i> リスト作成</a>
 		<div class="row flex-nowrap">
 			{% for list in list_list %}
 			<div class="bg-light m-3 p-2 list">
