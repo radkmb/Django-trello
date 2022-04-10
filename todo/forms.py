@@ -35,7 +35,8 @@ class CardForm(forms.ModelForm):
 
     class Meta:
         model = Card
-        fields = ("title", "description", "list")
+        fields = ("title", "description", "list", "order")
+        labels = {'title':'タイトル', 'description':'内容', 'list':'リスト', 'order':'優先度',}
 
 class CardCreateFromHomeForm(forms.ModelForm):
 
@@ -46,7 +47,8 @@ class CardCreateFromHomeForm(forms.ModelForm):
 
     class Meta:
         model = Card
-        fields = ("title", "description",)
+        fields = ("title", "description", "order")
+        labels = {'title':'タイトル', 'description':'内容', 'order':'優先度',}
 
 class CardUpdateForm(forms.ModelForm):
 
@@ -57,4 +59,5 @@ class CardUpdateForm(forms.ModelForm):
 
     class Meta:
         model = Card
-        fields = ("title", "description", "list")
+        fields = ("title", "description", "list", "order")
+        labels = {'title':'タイトル', 'description':'内容', 'list':'リスト', 'order':'優先度',}
