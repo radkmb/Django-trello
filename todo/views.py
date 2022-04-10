@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
+from django.http import HttpResponse
 from django.shortcuts import render, redirect, resolve_url, get_object_or_404 
 from django.urls import reverse_lazy
 from django.views.generic import DetailView, UpdateView, CreateView, ListView, DeleteView
@@ -119,3 +120,13 @@ class CardCreateFromHomeView(LoginRequiredMixin, CreateView):
         form.instance.list = list_instance
         form.instance.user = self.request.user
         return super().form_valid(form)
+
+
+def api_card_drag(request):
+    card_pk = request.POST['cardPk']
+    list_pk = request.POST['listPk']
+    card = get_object_or_404(Card, pk=card_pk)
+    list_ = get_object_or_404(List, pk=list_pk)
+    card.list = list_
+    card.save()
+    return HttpResponse('ok')

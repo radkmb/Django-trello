@@ -1,6 +1,7 @@
 {% extends "todo/base.html" %}
 
 {% block content %}
+{% csrf_token %}
 <div class="bg"></div>
 <div class="bg bg2"></div>
 <div class="bg bg3"></div>
@@ -9,14 +10,15 @@
 		<a class="btn btn-success my-3" href="{% url 'todo:lists_create' %}" role="button"><i class="fas fa-pen"></i> リスト作成</a>
 		<div class="row flex-nowrap">
 			{% for list in list_list %}
-			<div class="bg-light m-3 p-2 list">
+			<div class="bg-light m-3 p-2 list dropzone" data-pk="{{ list.pk }}">
 				<h4>{{ list.title }}
 					<a href="{% url 'todo:lists_update' list.pk %}" class="text-dark"><i class="far fa-edit fa-xs"></i></a>
 					<a href="{% url 'todo:lists_delete' list.pk %}" class="text-dark"><i class="far fa-trash-alt fa-xs"></i></a>
 				</h4>
 
+				<div class="dropzone-list">
 				{% for card in list.card_set.all %}
-				<a href="{% url 'todo:cards_detail' card.pk %}" class="card m-3">
+				<a href="{% url 'todo:cards_detail' card.pk %}" class="card m-3" id="card-{{ card.id }}" draggable="true" data-pk="{{ card.pk }}" data-parent-pk="{{ card.list.pk }}">
 					<div class="card-body">
 						<h5 class="card-title">{{ card.title }}</h5>
 						<footer>
@@ -25,6 +27,7 @@
 					</div>
 				</a>
 				{% endfor %}
+				</div>
 				<a href="{% url 'todo:cards_create_from_home' list.pk %}" class="text-dark"><i
 						class="far fa-plus-square"></i> さらにカードを追加</a>
 			</div>
@@ -33,4 +36,55 @@
 	</div>
 </div>
 
+<script>
+	function getCookie(name) {
+		let cookieValue = null;
+    	if (document.cookie && document.cookie !== "") {
+			const cookies = document.cookie.split(";");
+			for (let i = 0; i < cookies.length; i++) {
+				const cookie = cookies[i].trim();
+        		// Does this cookie string begin with the name we want?
+				if (cookie.substring(0, name.length + 1) === name + "=") {
+          			cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+          			break;
+        		}
+      		}
+    	}
+		return cookieValue;
+  	}
+	const csrftoken = getCookie("csrftoken");
+
+	document.querySelectorAll(".dropzone").forEach((elm) => {
+		const dropzone = elm.querySelector(".dropzone-list");
+		elm.ondragover = function () {
+			event.preventDefault();
+		};
+		elm.ondrop = function () {
+      		event.preventDefault();
+			let id = event.dataTransfer.getData("text/plain");
+			let draggedElement = document.getElementById(id);
+			dropzone.appendChild(draggedElement);
+			const cardPk = draggedElement.dataset.pk;
+			const listPk = this.dataset.pk;
+			$.ajax({
+				type: "POST",
+				url: "{% url 'todo:api_card_drag' %}",
+				data: { cardPk: cardPk, listPk: listPk },
+				headers: { "X-CSRFToken": csrftoken },
+			})
+			.done(function (data) {
+				draggedElement.dataset.parentPk = listPk;
+			})
+			.fail(function (XMLHttpRequest, status, e) {
+				alert(e);
+			});
+		};
+	});
+
+	document.querySelectorAll(".dropzone-list a.card").forEach((elm) => {
+		elm.ondragstart = function () {
+			event.dataTransfer.setData("text/plain", event.target.id);
+		};
+  	});
+</script>
 {% endblock %}
