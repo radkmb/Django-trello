@@ -85,6 +85,62 @@
 		elm.ondragstart = function () {
 			event.dataTransfer.setData("text/plain", event.target.id);
 		};
+		elm.ondragover = function () {
+			event.preventDefault();
+			event.stopPropagation();
+			let rect = this.getBoundingClientRect();
+			if (event.clientY - rect.top < this.clientHeight / 2) {
+				//マウスカーソルの位置が要素の半分より上
+				this.style.borderTop = "2px solid blue";
+				this.style.borderBottom = "";
+			} else {
+				//マウスカーソルの位置が要素の半分より下
+				this.style.borderTop = "";
+				this.style.borderBottom = "2px solid blue";
+			}
+		};
+		elm.ondragleave = function () {
+			this.style.borderTop = "";
+			this.style.borderBottom = "";
+		};
+		elm.ondrop = function () {
+			event.preventDefault();
+			event.stopPropagation();
+			let id = event.dataTransfer.getData("text/plain");
+			let draggedElement = document.getElementById(id);
+
+			let rect = this.getBoundingClientRect();
+			let insertKind = null;
+			if (event.clientY - rect.top < this.clientHeight / 2) {
+				//マウスカーソルの位置が要素の半分より上
+				this.parentNode.insertBefore(draggedElement, this);
+				insertKind = 'before';
+			} else {
+				//マウスカーソルの位置が要素の半分より下
+				this.parentNode.insertBefore(draggedElement, this.nextSibling);
+				insertKind = 'after';
+			}
+			this.style.borderTop = "";
+			this.style.borderBottom = "";
+
+			const cardPk = draggedElement.dataset.pk;
+			const listPk = this.dataset.parentPk;
+			$.ajax({
+				type: "POST",
+				url: "{% url 'todo:api_card_drag' %}",
+				data: {
+					cardPk: cardPk, listPk: listPk,
+					insertTarget: elm.dataset.pk, insertKind: insertKind 
+				},
+				headers: { "X-CSRFToken": csrftoken },
+			})
+			.done(function (data) {
+				draggedElement.dataset.parentPk = listPk;
+			})
+			.fail(function (XMLHttpRequest, status, e) {
+				console.log(e);
+			});
+    	};
   	});
 </script>
 {% endblock %}
